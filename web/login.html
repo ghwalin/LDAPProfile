@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Ghwalin"/>
+    <meta name="copyright" content="Marcel Suter"/>
+    <meta name="project" content="Bookshelf"/>
+    <meta name="description" content="book form login"/>
+    <title>Anmelden</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/style.css" media="all">
+</head>
+<body>
+<div class="container">
+    <form id="loginForm" name="login">
+        <h3>Anmelden</h3>
+        <div id="message" style="color: red;"></div>
+        <div class="form-group row">
+            <label for="username" class="col-sm-2 col-form-label">Benutzer / E-Mail</label>
+            <div class="col-sm-10">
+                <input id="username" name="username" type="text" size="30" maxlength="40" required/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="password" class="col-sm-2 col-form-label">Passwort</label>
+            <div class="col-sm-10">
+                <input id="password" name="password" type="password" size="30" maxlength="40" required/>
+            </div>
+        </div>
+
+        <button id="logon" type="submit">Anmelden</button>
+    </form>
+    <a href="./reset.html">Passwort vergessen</a>
+</div>
+<footer class="footer">
+    <div class="container-fluid footnav">
+        <div class="container">
+        </div>
+    </div>
+</footer>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="./js/login.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+</body>
+</html>

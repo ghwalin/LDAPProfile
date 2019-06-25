@@ -1,0 +1,20 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" build-on-make="true" name="LDAPProfile:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/LDAPProfile_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="LDAPProfile/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="LDAPProfile" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: com.unboundid:unboundid-ldapsdk-minimal-edition:3.2.1" />
+          <element id="library" level="project" name="Maven: com.unboundid:unboundid-ldapsdk:4.0.11" />
+          <element id="library" level="project" name="Maven: io.jsonwebtoken:jjwt-impl:0.10.5" />
+          <element id="library" level="project" name="Maven: io.jsonwebtoken:jjwt-jackson:0.10.5" />
+          <element id="library" level="project" name="Maven: io.jsonwebtoken:jjwt-api:0.10.5" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
