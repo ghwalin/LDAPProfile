@@ -1,0 +1,13 @@
+Additional fields per user
+* public key
+* userId (number)
+
+Better authorization for password reset
+* PPK challenge?
+* userId
+
+Admin stuff
+===========
+* searchable list of all people
+* Assign person to groups
+* Change first/lastname, username

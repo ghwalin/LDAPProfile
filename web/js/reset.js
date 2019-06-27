@@ -34,8 +34,7 @@ function submitForm(event) {
             data: $("#resetForm").serialize()
         })
         .done(function (jsonData) {
-            $("#message").text("Sie haben eine Email mit Instruktionen erhalten.");
-            $("#link").append("<a href='./profile.html?token=" + jsonData + "'>Reset-Link </a>");
+            window.location.href("./profile.html");
         })
         .fail(function (xhr, status, errorThrown) {
                 $("#message").text("Es ist ein Fehler aufgetreten");

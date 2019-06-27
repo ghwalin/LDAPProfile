@@ -17,49 +17,69 @@
     <form id="profileForm" name="profile">
         <h3>Profil bearbeiten</h3>
         <div id="message" style="color: red;"></div>
-        <div class="form-group row">
-            <label for="username" class="col-sm-2 col-form-label">Benutzername</label>
-            <div class="col-sm-10">
-                <input id="username" readonly class="form-control-plaintext" name="username" type="text" size="30" maxlength="40" required/>
+        <fieldset class="border p-2">
+            <legend class="w-auto">Benutzerdaten</legend>
+            <div class="form-group row">
+                <label for="username" class="col-sm-2 col-form-label">Benutzername</label>
+                <div class="col-sm-10">
+                    <input id="username" readonly class="form-control-plaintext" name="username" type="text" size="30"
+                           maxlength="40" required/>
+                </div>
             </div>
-        </div>
-        <div class="form-group row">
-            <label for="firstname" class="col-sm-2 col-form-label">Vorname</label>
-            <div class="col-sm-10">
-                <input id="firstname" name="firstname" readonly class="form-control-plaintext" type="text" size="30" maxlength="40" required/>
+            <div class="form-group row">
+                <label for="firstname" class="col-sm-2 col-form-label">Vorname</label>
+                <div class="col-sm-10">
+                    <input id="firstname" name="firstname" readonly class="form-control-plaintext" type="text" size="30"
+                           maxlength="40" required/>
+                </div>
             </div>
-        </div>
-        <div class="form-group row">
-            <label for="lastname" class="col-sm-2 col-form-label">Nachname</label>
-            <div class="col-sm-10">
-                <input id="lastname" name="lastname" readonly class="form-control-plaintext" type="text" size="30" maxlength="40" required/>
+            <div class="form-group row">
+                <label for="lastname" class="col-sm-2 col-form-label">Nachname</label>
+                <div class="col-sm-10">
+                    <input id="lastname" name="lastname" readonly class="form-control-plaintext" type="text" size="30"
+                           maxlength="40" required/>
+                </div>
             </div>
-        </div>
-        <div class="form-group row">
-            <label for="email" class="col-sm-2 col-form-label">E-Mail</label>
-            <div class="col-sm-10">
-                <input id="email" name="email" type="text" size="30" maxlength="40" required/>
+            <div class="form-group row">
+                <label for="email" class="col-sm-2 col-form-label">E-Mail</label>
+                <div class="col-sm-10">
+                    <input id="email" name="email" type="text" size="30" maxlength="40" required/>
+                </div>
             </div>
-        </div>
-        <div class="form-group row">
-            <label for="mobile" class="col-sm-2 col-form-label">Mobiltelefon</label>
-            <div class="col-sm-10">
-                <input id="mobile" name="mobile" type="text" size="30" pattern="(\+41)\s?(\d{2})\s?(\d{3})\s?(\d{2})\s?(\d{2})" />
-                <span>+41 71 999 99 99</span>
+
+            <div class="form-group row">
+                <label for="password" class="col-sm-2 col-form-label">Passwort</label>
+                <div class="col-sm-10">
+                    <input id="password" name="password" type="password" pattern=".{8,30}" size="30" maxlength="30"/>
+                </div>
             </div>
-        </div>
-        <div class="form-group row">
-            <label for="password" class="col-sm-2 col-form-label">Passwort</label>
-            <div class="col-sm-10">
-                <input id="password" name="password" type="password" pattern=".{8,30}" size="30" maxlength="30" />
+            <div class="form-group row">
+                <label for="password2" class="col-sm-2 col-form-label">Bestätigen</label>
+                <div class="col-sm-10">
+                    <input id="password2" name="password2" type="password" size="30" maxlength="40"/>
+                </div>
             </div>
-        </div>
-        <div class="form-group row">
-            <label for="password2" class="col-sm-2 col-form-label">Bestätigen</label>
-            <div class="col-sm-10">
-                <input id="password2" name="password2" type="password" size="30" maxlength="40" />
+        </fieldset>
+        <fieldset class="border p-2">
+            <legend class="w-auto" title="Diese Informationen werden benötigt, wenn Sie Ihr Passwort vergessen haben.">
+                Informationen für Passwort-Reset
+            </legend>
+            <div class="form-group row">
+                <label for="mobile" class="col-sm-2 col-form-label">Mobiltelefon</label>
+                <div class="col-sm-10">
+                    <input id="mobile" name="mobile" type="text" size="30"
+                           pattern="(\+41)\s?(\d{2})\s?(\d{3})\s?(\d{2})\s?(\d{2})"/>
+                    <span>+41 71 999 99 99</span>
+                </div>
             </div>
-        </div>
+            <div class="form-group row">
+                <label for="idCardNo" class="col-sm-2 col-form-label">Ausweisnummer</label>
+                <div class="col-sm-10">
+                    <input id="idCardNo" name="mobile" type="text" size="30" pattern=".{6,20}"/>
+                    <span>Schülerausweis, ID</span>
+                </div>
+            </div>
+        </fieldset>
 
         <button id="save" type="submit">Speichern</button>
         <button id="reset" type="reset">Zurücksetzen</button>

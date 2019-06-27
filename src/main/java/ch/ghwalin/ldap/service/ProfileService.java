@@ -2,6 +2,7 @@ package ch.ghwalin.ldap.service;
 
 
 import ch.ghwalin.ldap.model.User;
+import ch.ghwalin.ldap.model.UserMap;
 import ch.ghwalin.ldap.util.Result;
 import ch.ghwalin.ldap.util.TokenHandler;
 
@@ -43,7 +44,7 @@ public class ProfileService {
     @Produces(MediaType.TEXT_PLAIN)
     public Response login(
             @Valid @BeanParam User user,
-            @CookieParam("token") String token
+            @CookieParam("jwtoken") String token
     ) {
         int status = 403;
 
@@ -55,16 +56,16 @@ public class ProfileService {
             if (result == Result.ERROR) status = 500;
         }
 
-        return buildResponse(status, "");
-    }
-
-    @GET
-    @Path("link")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response readLink(
-            @QueryParam("token") String token
-    ) {
-        return readProfile(token);
+        return Response
+                .status(status)
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Credentials", "true")
+                .header("Access-Control-Allow-Headers",
+                        "origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Methods",
+                        "GET, POST, DELETE")
+                .entity("")
+                .build();
     }
 
     /**
@@ -77,7 +78,7 @@ public class ProfileService {
     @Path("read")
     @Produces(MediaType.APPLICATION_JSON)
     public Response readProfile(
-            @CookieParam("token") String token
+            @CookieParam("jwtoken") String token
     ) {
         int status = 403;
         User user = null;
@@ -90,18 +91,6 @@ public class ProfileService {
                 status = 200;
         }
 
-
-        return buildResponse(status, user);
-    }
-
-    /**
-     * builds a response object
-     *
-     * @param status the http status
-     * @param entity the user object to be sent
-     * @return response
-     */
-    private Response buildResponse(int status, Object entity) {
         return Response
                 .status(status)
                 .header("Access-Control-Allow-Origin", "*")
@@ -110,7 +99,47 @@ public class ProfileService {
                         "origin, content-type, accept, authorization")
                 .header("Access-Control-Allow-Methods",
                         "GET, POST, DELETE")
-                .entity(entity)
+                .entity(user)
+                .build();
+    }
+    /**
+     * reads the user profile
+     *
+     * @param token encrypted authentication token
+     * @return Response
+     */
+    @GET
+    @Path("people")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listPeople(
+            @CookieParam("jwtoken") String token,
+            @QueryParam("filter") @DefaultValue("") String filter
+    ) {
+        int status = 403;
+        UserMap userMap = null;
+        if (token != null) {
+            Map<String, String> claimMap = TokenHandler.readClaims(token);
+            String userDN = claimMap.getOrDefault("subject", null);
+
+            // TODO authorization for admin only
+            if (userDN != null) {
+                userMap = new UserMap(filter);
+                if (userMap.getUsers().isEmpty())
+                    status = 404;
+                else
+                    status = 200;
+            }
+        }
+
+        return Response
+                .status(status)
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Credentials", "true")
+                .header("Access-Control-Allow-Headers",
+                        "origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Methods",
+                        "GET, POST, DELETE")
+                .entity(userMap.getUsers())
                 .build();
     }
 }

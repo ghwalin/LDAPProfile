@@ -56,23 +56,14 @@ public class UserService {
             status = 200;
         }
 
-        NewCookie roleCookie = new NewCookie(
-                "userRole", userDN,
-                "/",
-                "",
-                "Login-Cookie",
-                6000,
-                false
-        );
         NewCookie tokenCookie = new NewCookie(
-                "token", TokenHandler.buildToken(userDN),
+                "jwtoken", TokenHandler.buildToken(userDN, 500),
                 "/",
                 "",
                 "Auth-Token",
                 6000,
                 false
         );
-
 
         return Response
                 .status(status)
@@ -83,7 +74,6 @@ public class UserService {
                 .header("Access-Control-Allow-Methods",
                         "GET, POST, DELETE")
                 .entity("")
-                .cookie(roleCookie)
                 .cookie(tokenCookie)
                 .build();
     }
@@ -97,17 +87,8 @@ public class UserService {
     @Path("logoff")
     @Produces(MediaType.TEXT_PLAIN)
     public Response logoff() {
-        NewCookie roleCookie = new NewCookie(
-                "userRole", "guest",
-                "/",
-                "",
-                "Login-Cookie",
-                600,
-                false
-        );
-
         NewCookie tokenCookie = new NewCookie(
-                "token", "",
+                "jwtoken", "",
                 "/",
                 "",
                 "Auth-Token",
@@ -124,7 +105,6 @@ public class UserService {
                 .header("Access-Control-Allow-Methods",
                         "GET, POST, DELETE")
                 .entity("")
-                .cookie(roleCookie)
                 .cookie(tokenCookie)
                 .build();
     }
@@ -152,16 +132,24 @@ public class UserService {
 
         int status = 200;
         User user = new User();
-        String resetLink = "";
+        String userDN = "";
         if (countValues >= 2) {
             user = new User(username, mobile, email);
             if (user.getDistinguishedName() != null) {
-                // TODO send link as email
-                resetLink = TokenHandler.buildToken(user.getDistinguishedName());
+                userDN = user.getDistinguishedName();
             } else {
                 status = 404;
             }
         }
+
+        NewCookie tokenCookie = new NewCookie(
+                "jwtoken", TokenHandler.buildToken(userDN, 1),
+                "/",
+                "",
+                "Auth-Token",
+                6000,
+                false
+        );
 
         return Response
                 .status(status)
@@ -171,7 +159,8 @@ public class UserService {
                         "origin, content-type, accept, authorization")
                 .header("Access-Control-Allow-Methods",
                         "GET, POST, DELETE")
-                .entity(resetLink)
+                .entity("")
+                .cookie(tokenCookie)
                 .build();
     }
 

@@ -28,13 +28,14 @@ public class TokenHandler {
     /**
      * builds the token
      * @param data the token data
+     * @param duration the duration of this token in minutes
      * @return
      */
-    public static String buildToken(String data) {
+    public static String buildToken(String data, int duration) {
         byte[] keyBytes = JerseyConfig.getProperty("jwtSecret").getBytes(StandardCharsets.UTF_8);
         SecretKey secretKey = Keys.hmacShaKeyFor(keyBytes);
         Date now = new Date();
-        Date expiration = new Date(now.getTime() + 300000);
+        Date expiration = new Date(now.getTime() + duration * 60000);
         String jws = Jwts.builder()
                 .setIssuer("LDAPProfile")
                 .setSubject(encrypt(data, JerseyConfig.getProperty("jwtKey")))
@@ -67,9 +68,9 @@ public class TokenHandler {
                     )
             );
 
-
         } catch (JwtException ex) {
-            System.out.println(ex.getCause());
+            ex.printStackTrace();
+//            System.out.println(ex.getCause());
         }
         return claimMap;
     }

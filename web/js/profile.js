@@ -48,13 +48,9 @@ function saveProfile(event) {
  * reads the user profile
  */
 function readProfile() {
-    var path="read";
-    if ($.urlParam("token") !== null) {
-        path = "link?token=" + $.urlParam("token");
-    }
     $
         .ajax({
-            url: "./resource/profile/" + path,
+            url: "./resource/profile/path",
             dataType: "json",
             type: "GET",
         })

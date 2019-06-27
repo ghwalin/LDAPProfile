@@ -12,7 +12,7 @@ import javax.ws.rs.FormParam;
 import java.util.*;
 
 /**
- * provides services for authentication
+ * the profile of a user
  * <p>
  * LDAP Profile
  *
@@ -42,9 +42,13 @@ public class User {
     @FormParam("mobile")
     private String mobile;
 
-    @Pattern(regexp="(^$|.{8,30})")
+    @Pattern(regexp = "(^$|.{8,30})")
     @FormParam("password")
     private String password;
+
+    @Pattern(regexp = "(^$|.{6,20})")
+    @FormParam("idCardNo")
+    private String idCardNo;
 
     /**
      * default constructor
@@ -55,25 +59,27 @@ public class User {
 
     /**
      * constructor: load user data
+     *
      * @param userDN the dn of the user
      */
-    public User (String userDN) {
+    public User(String userDN) {
         readUserEntry(userDN);
     }
 
     /**
      * constructor: search for a user
-     * @param username  the username
-     * @param mobile    the mobile phone number
-     * @param email     the email address
+     *
+     * @param username the username
+     * @param mobile   the mobile phone number
+     * @param email    the email address
      */
-    public User (String username, String mobile, String email) {
+    public User(String username, String mobile, String email) {
         List<Filter> filterList = new ArrayList<>();
-        if (username != null && username.length() > 3){
+        if (username != null && username.length() > 3) {
             filterList.add(Filter.createEqualityFilter("cn", username));
         }
         if (mobile != null && mobile.length() > 10) {
-            filterList.add(Filter.createEqualityFilter("mobile",mobile));
+            filterList.add(Filter.createEqualityFilter("mobile", mobile));
         }
         if (email != null && email.length() > 5) {
             filterList.add(Filter.createEqualityFilter("mail", email));
@@ -83,14 +89,15 @@ public class User {
         SearchResult searchResult = OpenLDAP.searchUser(filter);
         if (searchResult.getEntryCount() == 1) {
             SearchResultEntry entry = searchResult.getSearchEntries().get(0);
-            readUserEntry( entry.getDN() );
+            readUserEntry(entry.getDN());
         }
     }
 
     /**
      * authenticates the user with username / password
-     * @param username  the username to be authenticated
-     * @param password  the password to be authenticated
+     *
+     * @param username the username to be authenticated
+     * @param password the password to be authenticated
      * @return the user role
      */
     public String authenticate(String username, String password) {
@@ -100,6 +107,7 @@ public class User {
 
     /**
      * saves the user to the ldap
+     *
      * @return Result
      */
     public Result save() {
@@ -119,6 +127,7 @@ public class User {
 
     /**
      * reads a ldap entry identified by the dn
+     *
      * @param userDN the distinguished name
      */
     private void readUserEntry(String userDN) {
@@ -245,6 +254,25 @@ public class User {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    /**
+     * Gets the idCardNo
+     *
+     * @return value of idCardNo
+     */
+    public String getIdCardNo() {
+        return idCardNo;
+    }
+
+    /**
+     * Sets the idCardNo
+     *
+     * @param idCardNo the value to set
+     */
+
+    public void setIdCardNo(String idCardNo) {
+        this.idCardNo = idCardNo;
     }
 
     /**

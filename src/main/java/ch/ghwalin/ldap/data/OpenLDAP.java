@@ -93,7 +93,7 @@ public final class OpenLDAP {
         SearchResult searchResult = null;
 
         SearchRequest searchRequest = new SearchRequest(
-                JerseyConfig.getProperty("ldapBase"),
+                JerseyConfig.getProperty("ldapUserBase"),
                 SearchScope.SUB,
                 filter);
 
