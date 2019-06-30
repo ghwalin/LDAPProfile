@@ -103,44 +103,4 @@ public class ProfileService {
                 .entity(user)
                 .build();
     }
-    /**
-     * reads the user profile
-     *
-     * @param token encrypted authentication token
-     * @return Response
-     */
-    @GET
-    @Path("people")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response listPeople(
-            @CookieParam("jwtoken") String token,
-            @QueryParam("filter") String filter
-    ) {
-        int status = 403;
-        UserMap userMap = null;
-        if (token != null) {
-            Map<String, String> claimMap = TokenHandler.readClaims(token);
-            String userDN = claimMap.getOrDefault("subject", null);
-
-            // TODO authorization for admin only
-            if (userDN != null) {
-                userMap = new UserMap(filter);
-                if (userMap.getUsers().isEmpty())
-                    status = 404;
-                else
-                    status = 200;
-            }
-        }
-
-        return Response
-                .status(status)
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Headers",
-                        "origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Methods",
-                        "GET, POST, DELETE")
-                .entity(userMap.getUsers())
-                .build();
-    }
 }
