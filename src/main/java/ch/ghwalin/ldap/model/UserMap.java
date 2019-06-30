@@ -37,23 +37,23 @@ public class UserMap {
      * @param filter
      */
     private void readUsers(String filter) {
-        Filter userFilter = Filter.createORFilter(
-                Filter.createSubAnyFilter("cn", filter),
-                Filter.createSubAnyFilter("sn", filter),
-                Filter.createSubAnyFilter("givenname", filter)
-        );
+        Filter userFilter = null;
+
+        if (filter == null) {
+            userFilter = Filter.createPresenceFilter("cn");
+        } else {
+            userFilter = Filter.createORFilter(
+                    Filter.createSubAnyFilter("cn", filter),
+                    Filter.createSubAnyFilter("sn", filter),
+                    Filter.createSubAnyFilter("givenname", filter)
+            );
+        }
 
         SearchResult searchResult = OpenLDAP.searchUser(userFilter);
         for (int i = 0; i < searchResult.getEntryCount(); i++) {
             SearchResultEntry entry = searchResult.getSearchEntries().get(i);
-            User user = new User();
-            user.setDistinguishedName(entry.getDN());
-            user.setUsername(entry.getAttributeValue("cn"));
-            user.setFirstname(entry.getAttributeValue("givenname"));
-            user.setLastname(entry.getAttributeValue("sn"));
-            user.setEmail(entry.getAttributeValue("mail"));
-            user.setMobile(entry.getAttributeValue("mobile"));
-            getUsers().put(user.getUsername(), user);
+            User user = new User(entry);
+            getUsers().put(user.getDistinguishedName(), user);
         }
     }
 

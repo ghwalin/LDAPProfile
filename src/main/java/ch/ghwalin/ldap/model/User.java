@@ -22,6 +22,9 @@ import java.util.*;
  */
 public class User {
     private String distinguishedName;
+
+    private List<Group> memberOf;
+
     @NotNull
     @FormParam("username")
     private String username;
@@ -58,12 +61,21 @@ public class User {
     }
 
     /**
+     * constructor: new user from an ldap entry
+     * @param entry the ldap entry
+     */
+    public User(SearchResultEntry entry) {
+        readEntry(entry);
+    }
+
+    /**
      * constructor: load user data
      *
      * @param userDN the dn of the user
      */
     public User(String userDN) {
-        readUserEntry(userDN);
+        SearchResultEntry entry = OpenLDAP.readEntry(userDN);
+        readEntry(entry);
     }
 
     /**
@@ -89,7 +101,7 @@ public class User {
         SearchResult searchResult = OpenLDAP.searchUser(filter);
         if (searchResult.getEntryCount() == 1) {
             SearchResultEntry entry = searchResult.getSearchEntries().get(0);
-            readUserEntry(entry.getDN());
+            readEntry(entry);
         }
     }
 
@@ -126,19 +138,52 @@ public class User {
     }
 
     /**
-     * reads a ldap entry identified by the dn
-     *
-     * @param userDN the distinguished name
+     * sets the values from an ldap entry
+     * @param entry the ldap entry
      */
-    private void readUserEntry(String userDN) {
-        SearchResultEntry entry = OpenLDAP.readEntry(userDN);
+    public void readEntry(SearchResultEntry entry) {
         if (entry != null) {
-            setDistinguishedName(userDN);
+            setDistinguishedName(entry.getDN());
             setUsername(entry.getAttributeValue("cn"));
             setFirstname(entry.getAttributeValue("givenname"));
             setLastname(entry.getAttributeValue("sn"));
             setEmail(entry.getAttributeValue("mail"));
             setMobile(entry.getAttributeValue("mobile"));
+
+            setMemberOf(entry.getAttributeValues("memberOf"));
+        }
+    }
+    /**
+     * Gets the memberOf
+     *
+     * @return value of memberOf
+     */
+    public List<Group> getMemberOf() {
+        return memberOf;
+    }
+
+    /**
+     * Sets the memberOf
+     *
+     * @param memberOf the value to set
+     */
+
+    public void setMemberOf(List<Group> memberOf) {
+        this.memberOf = memberOf;
+    }
+
+    /**
+     * Sets the memberOf-list from an array of String
+     * @param membership all memberships as String[]
+     */
+    public void setMemberOf(String[] membership) {
+        this.memberOf = new ArrayList<Group>();
+        if (membership != null) {
+            for (int i = 0; i < membership.length; i++) {
+                Group group = new Group();
+                group.setGroupName(membership[i]);
+                getMemberOf().add(group);
+            }
         }
     }
 

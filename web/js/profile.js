@@ -50,7 +50,7 @@ function saveProfile(event) {
 function readProfile() {
     $
         .ajax({
-            url: "./resource/profile/path",
+            url: "./resource/profile/read",
             dataType: "json",
             type: "GET",
         })
@@ -76,6 +76,13 @@ function showProfile(jsonData) {
     $("#email").val(jsonData.email);
     $("#mobile").val(jsonData.mobile);
     $("#password").val("");
+
+    var groups = person.memberOf;
+    var text = "";
+    $.each(groups, function(group) {
+        text += group + " / ";
+    });
+    $("#memberOf").val(text);
 
 }
 

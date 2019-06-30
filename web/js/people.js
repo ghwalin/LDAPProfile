@@ -14,7 +14,7 @@
 $(document).ready(function () {
     readPeople();
     $("#peopleList").on("click", "button", function(){
-        window.location.href="./profile.html?cn=" + this.value;
+        window.location.href="./profile.html?dn=" + this.value;
     });
 
 });
@@ -24,9 +24,12 @@ $(document).ready(function () {
  */
 function readPeople() {
     var filter = $.urlParam("filter");
+    var urlParam = "";
+    if (filter !== null)
+        urlParam = "?filter=" + filter;
     $
         .ajax({
-            url: "./resource/profile/people?filter=" + filter,
+            url: "./resource/profile/people" + urlParam,
             dataType: "json",
             type: "GET",
         })
@@ -52,7 +55,13 @@ function showPeople(peopleMap) {
         table += makeCell(person.username);
         table += makeCell(person.firstname);
         table += makeCell(person.lastname);
-        table += makeCell("<button type='button' id='edit" + personId + "' value='" + personId + "'>Edit</button>");
+        var groups = person.memberOf;
+        var text = "";
+        $.each(groups, function(group) {
+            text += group + " / ";
+        });
+        table += makeCell(text);
+        table += makeCell("<button type='button' name='edit' value='" + personId + "'>Edit</button>");
         table += "</tr>";
     });
     $("#peopleList > tbody").append(table);

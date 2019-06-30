@@ -78,7 +78,8 @@ public class ProfileService {
     @Path("read")
     @Produces(MediaType.APPLICATION_JSON)
     public Response readProfile(
-            @CookieParam("jwtoken") String token
+            @CookieParam("jwtoken") String token,
+            @QueryParam("dn") String distinguishedName
     ) {
         int status = 403;
         User user = null;
@@ -113,7 +114,7 @@ public class ProfileService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response listPeople(
             @CookieParam("jwtoken") String token,
-            @QueryParam("filter") @DefaultValue("") String filter
+            @QueryParam("filter") String filter
     ) {
         int status = 403;
         UserMap userMap = null;

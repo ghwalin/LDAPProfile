@@ -29,9 +29,10 @@ public class TokenHandler {
      * builds the token
      * @param data the token data
      * @param duration the duration of this token in minutes
+     * @param role the user role ("user" or "admin")
      * @return
      */
-    public static String buildToken(String data, int duration) {
+    public static String buildToken(String data, int duration, String role) {
         byte[] keyBytes = JerseyConfig.getProperty("jwtSecret").getBytes(StandardCharsets.UTF_8);
         SecretKey secretKey = Keys.hmacShaKeyFor(keyBytes);
         Date now = new Date();
@@ -39,6 +40,7 @@ public class TokenHandler {
         String jws = Jwts.builder()
                 .setIssuer("LDAPProfile")
                 .setSubject(encrypt(data, JerseyConfig.getProperty("jwtKey")))
+                .claim("role", encrypt(role, JerseyConfig.getProperty("jwtKey")))
                 .setExpiration(expiration)
                 .setIssuedAt(now)
                 .signWith(secretKey)
@@ -67,6 +69,7 @@ public class TokenHandler {
                             JerseyConfig.getProperty("jwtKey")
                     )
             );
+
 
         } catch (JwtException ex) {
             ex.printStackTrace();

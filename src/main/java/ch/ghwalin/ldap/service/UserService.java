@@ -46,18 +46,15 @@ public class UserService {
             @FormParam("password") String password
     ) {
         User user = new User();
-        int status;
+        int httpStatus = 200;
 
         String userDN = user.authenticate(username, password);
         if (userDN == null) {
-            status = 401;
-        } else {
-
-            status = 200;
+            httpStatus = 401;
         }
 
         NewCookie tokenCookie = new NewCookie(
-                "jwtoken", TokenHandler.buildToken(userDN, 500),
+                "jwtoken", TokenHandler.buildToken(userDN, 500, "admin"), // FIXME
                 "/",
                 "",
                 "Auth-Token",
@@ -66,7 +63,7 @@ public class UserService {
         );
 
         return Response
-                .status(status)
+                .status(httpStatus)
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Credentials", "true")
                 .header("Access-Control-Allow-Headers",
@@ -130,20 +127,21 @@ public class UserService {
         if (mobile != null && mobile.length() > 10) countValues++;
         if (email != null && email.length() > 5) countValues++;
 
-        int status = 200;
+        int httpStatus = 404;
         User user = new User();
         String userDN = "";
+        String userRole = "guest";
         if (countValues >= 2) {
             user = new User(username, mobile, email);
             if (user.getDistinguishedName() != null) {
                 userDN = user.getDistinguishedName();
-            } else {
-                status = 404;
+                userRole = user.getMemberOf().get(0).getGroupName();
+                httpStatus = 200;
             }
         }
 
         NewCookie tokenCookie = new NewCookie(
-                "jwtoken", TokenHandler.buildToken(userDN, 1),
+                "jwtoken", TokenHandler.buildToken(userDN, 1, userRole),
                 "/",
                 "",
                 "Auth-Token",
@@ -152,7 +150,7 @@ public class UserService {
         );
 
         return Response
-                .status(status)
+                .status(httpStatus)
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Credentials", "true")
                 .header("Access-Control-Allow-Headers",
